@@ -18,7 +18,7 @@ public class WebReactorController {
     private final PersonService personService;
 
 
-    @GetMapping(value = "/finite", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    @GetMapping(value = "/finite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Person> getFiniteNames() {
         return Flux.range(0, 10)
             .delayElements(Duration.ofMillis(500L + Faker.instance().random().nextInt(2000)))

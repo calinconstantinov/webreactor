@@ -26,9 +26,10 @@ public class WebReactorController {
     }
 
 
-    @GetMapping(value = "/infinte", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> getInfiniteNames() {
-        return null;
+    @GetMapping(value = "/infinite", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Person> getInfiniteNames() {
+        return Flux.interval(Duration.ofMillis(300))
+            .map(i -> personService.createPerson());
     }
 
 }

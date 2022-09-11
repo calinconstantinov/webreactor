@@ -4,6 +4,7 @@ import com.endava.webreactor.models.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -18,7 +19,16 @@ import static org.springframework.http.MediaType.TEXT_EVENT_STREAM;
 class WebReactorControllerIT {
 
     @Test
-    void testFinite_One() {
+    void testFinite_RestTemplate() {
+        String response
+            = new RestTemplate().getForObject("http://localhost:8080/finite", String.class);
+
+        assertNotNull(response);
+    }
+
+
+    @Test
+    void testFinite_WebClient() {
         Flux<Person> personFlux = WebClient.builder()
             .build()
             .get()
@@ -34,7 +44,7 @@ class WebReactorControllerIT {
 
 
     @Test
-    void testFinite_Two() {
+    void testFinite_WebTestClient() {
         WebTestClient.bindToServer()
             .responseTimeout(Duration.ofSeconds(30))
             .build()
@@ -81,6 +91,7 @@ class WebReactorControllerIT {
             .expectNextCount(1)
             .thenCancel()
             .verify();
+
     }
 
 }

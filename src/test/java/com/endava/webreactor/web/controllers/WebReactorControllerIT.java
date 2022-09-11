@@ -55,9 +55,16 @@ class WebReactorControllerIT {
             .expectBodyList(Person.class).hasSize(10);
     }
 
+    @Test
+    void testInFinite_RestTemplate() {
+        String response
+            = new RestTemplate().getForObject("http://localhost:8080/infinite", String.class);
+
+        assertNotNull(response);
+    }
 
     @Test
-    void testInfinite_One() {
+    void testInfinite_WebClient() {
         Flux<Person> personFlux = WebClient.builder()
             .build()
             .get()
@@ -74,7 +81,7 @@ class WebReactorControllerIT {
 
 
     @Test
-    void testInfinite_Two() {
+    void testInfinite_WebTestClient() {
         FluxExchangeResult<Person> personFluxExchangeResult = WebTestClient.bindToServer()
             .responseTimeout(Duration.ofSeconds(30))
             .build()
